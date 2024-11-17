@@ -275,12 +275,12 @@ elif selection == "ORFs Finder":
     st.title("ORFs Finder Tool")
 
     # User inputs
-    sequence_input = st.text_area("Enter DNA sequence (FASTA or plain):").strip().replace("\n", "")
+    sequence_input = st.text_area("Enter DNA sequence:").strip().replace("\n", "")
     min_length = st.number_input("Minimum ORF length", min_value=1, value=75)
 
     # Select genetic code (translation table) using a dropdown
     genetic_code = st.selectbox("Select Genetic Code (Translation Table):",
-        [(f"{k}: {v.names[0]}", k) for k, v in CodonTable.unambiguous_dna_by_id.items()],format_func=lambda x: x[0])[1]
+        [(f"{k}: {v.names[0]}", k) for k, v in CodonTable.unambiguous_dna_by_id.items()], format_func=lambda x: x[0])[1]
 
     # Select start codon policy using radio buttons    
     start_codon_policy = st.radio("ORF start codon to use:", ["ATG only", "ATG and alternative initiation codons", "Any sense codon"])
@@ -290,14 +290,39 @@ elif selection == "ORFs Finder":
     if st.button("Find ORFs"):
         orfs = find_orfs_ncbi(sequence_input, min_length, genetic_code, start_codon_policy, ignore_nested)
     
-    # Convert ORFs list to DataFrame
+        # Convert ORFs list to DataFrame
         orf_df = pd.DataFrame(orfs)
     
-    # Convert `Seq` objects to strings in the "Translated Protein" column
+        # Convert `Seq` objects to strings in the "Translated Protein" column
         if "Translated Protein" in orf_df.columns:
             orf_df["Translated Protein"] = orf_df["Translated Protein"].astype(str)
     
-    # Display the ORFs DataFrame
+        # Display the ORFs DataFrame
         st.write(f"Found {len(orf_df)} ORFs:")
         st.dataframe(orf_df)
 
+    # Expander theory and explanation section
+    with st.expander("Theory and Explanation"):
+        st.subheader("Understanding Open Reading Frames (ORFs)")
+
+        st.markdown("""
+        **What is an ORF?**  
+        An Open Reading Frame (ORF) is a continuous stretch of DNA that starts with a start codon (e.g., ATG) and ends with a stop codon (e.g., TAA, TAG, TGA). ORFs are critical for gene prediction as they often represent protein-coding regions.
+
+        **Algorithm for ORF Finding**:
+        1. **Identify Start and Stop Codons**:
+            - Scan the DNA sequence for all occurrences of start and stop codons based on the selected start codon policy.
+        2. **Calculate ORF Lengths**:
+            - Measure the distance between start and stop codons.
+        3. **Filter ORFs by Minimum Length**:
+            - Exclude ORFs shorter than the user-defined threshold.
+        4. **Handle Nested ORFs** (if selected):
+            - Ignore shorter ORFs fully contained within larger ORFs.
+
+        **Practical Applications**:
+        - **Gene Prediction**: Identifying regions likely to encode proteins.
+        - **Comparative Genomics**: Analyzing genome sequences to discover evolutionary relationships.
+        
+        **References**:
+        St. Clair, C. (2016). *Exploring Bioinformatics* (2nd ed., pp. 175–177). Jones & Bartlett Learning.
+        """)
