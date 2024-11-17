@@ -168,8 +168,8 @@ if selection == "Home":
                     \n  Hamad Saleh Almarzooqi
                     \n  Mayed Almemari
              """)
-
-# DNA Translate/Transcribe tool
+    st.write("This project is part of the Bioinformatics course at the United Arab Emirates University (UAEU).")
+    
 elif selection == "DNA Translate/Transcribe":
     st.title("DNA Translate or Transcribe")
 
@@ -185,10 +185,29 @@ elif selection == "DNA Translate/Transcribe":
             result = dna_seq.transcribe()
         elif action == "Translate (DNA to Protein)":
             # DNA Translation logic using Biopython Seq object + translate() default to standard genetic code
-            result =  dna_seq.translate()
+            result = dna_seq.translate()
         st.write("**Result:**", result)
-    
-    
+
+    # Add theory and explanation section
+    with st.expander("Theory and Explanation"):
+        st.subheader("Understanding DNA Translation and Transcription")
+        
+        st.markdown("""
+        **DNA Transcription**:  
+        Transcription is the process of converting a DNA template strand into a complementary RNA strand. This step is crucial in gene expression, where the RNA serves as a template for protein synthesis. 
+
+        **DNA Translation**:  
+        Translation involves converting the mRNA sequence into a sequence of amino acids to form a protein. This process uses the genetic code, which maps nucleotide triplets (codons) to specific amino acids.
+
+        **Algorithm Used in This Tool**:
+        1. **Transcription**:
+            - Replace thymine (T) in DNA with uracil (U) to form RNA.
+        2. **Translation**:
+            - Convert RNA codons into amino acids using a standard genetic code.
+        
+        **References**:
+        St. Clair, C. (2016). *Exploring Bioinformatics* (2nd ed.). Jones & Bartlett Learning.
+        """)
 
 # Global Sequence Alignment tool
 elif selection == "Global Sequence Alignment":
