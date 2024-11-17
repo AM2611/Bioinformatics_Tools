@@ -188,7 +188,7 @@ elif selection == "DNA Translate/Transcribe":
             result = dna_seq.translate()
         st.write("**Result:**", result)
 
-    # Add theory and explanation section
+    # Expander theory and explanation section
     with st.expander("Theory and Explanation"):
         st.subheader("Understanding DNA Translation and Transcription")
         
@@ -216,7 +216,6 @@ elif selection == "Global Sequence Alignment":
     # User inputs
     sequence1 = st.text_area("Enter Sequence 1:")
     sequence2 = st.text_area("Enter Sequence 2:")
-    # Input fields for match, mismatch, and gap scores with default values and range
     matching_score = st.number_input("Match score", -100, 100, 1)
     mismatching_score = st.number_input("Mismatch score", -100, 100, -1)
     gap_score = st.number_input("Gap penalty", -100, 100, -2)
@@ -224,26 +223,52 @@ elif selection == "Global Sequence Alignment":
     # Perform sequence alignment
     if st.button("Align Sequences"):
         valid_nucleotides = {"A", "C", "G", "U", "T"}
-        # Check if the input sequences contain valid nucleotides
         if all(char in valid_nucleotides for char in sequence1.upper()) and all(char in valid_nucleotides for char in sequence2.upper()):
             # Perform global sequence alignment using Needleman-Wunsch function
-            align1,align2, score_table = needleman_wunsch(sequence1, sequence2, matching_score, mismatching_score, gap_score)
-            # Create MultiIndex for the alignment table
+            align1, align2, score_table = needleman_wunsch(sequence1, sequence2, matching_score, mismatching_score, gap_score)
             multi_index_columns = pd.MultiIndex.from_tuples([(f"Pos {i}", col) for i, col in enumerate("-" + sequence2.upper())])
             multi_index_index = pd.MultiIndex.from_tuples([(f"Pos {i}", row) for i, row in enumerate("-" + sequence1.upper())])
-            # Create the DataFrame with MultiIndex columns and rows
             alignment_table = pd.DataFrame(score_table, index=multi_index_index, columns=multi_index_columns)
+            
             # Display the alignment results
-            st.write("Alignment result: ")
+            st.write("Alignment result:")
             st.write(align1)
             st.write(align2)
             st.write("Alignment Score:", score_table[-1][-1])
             st.write("Alignment Matrix:")
             st.dataframe(alignment_table)
-
-        # Display error message if invalid input is found
         else:
-            st.write("Please enter valid DNA sequences")
+            st.write("Please enter valid DNA sequences.")
+
+    # Expander theory and explanation section
+    with st.expander("Theory and Explanation"):
+        st.subheader("Understanding Global Sequence Alignment")
+        
+        st.markdown("""
+        **Global Sequence Alignment**:  
+        This technique is used to align two sequences from end to end, identifying similarities and differences across their entire length. It is particularly useful for comparing sequences of similar lengths, such as homologous genes from different species.
+
+        **Needleman-Wunsch Algorithm**:
+        The Needleman-Wunsch algorithm is a dynamic programming approach to global sequence alignment. It ensures the optimal alignment by considering gaps, matches, and mismatches between sequences.
+
+        **Algorithm Steps**:
+        1. **Initialization**: 
+           - Construct a matrix where the first row and column are initialized with gap penalties.
+        2. **Matrix Filling**:
+           - Populate each cell based on the match, mismatch, or gap penalties.
+           - Calculate the score for each possible alignment path.
+           - Choose the highest score for each cell.
+           - Where horizontal or vertical represents a gap, and diagonal movement represents a match or mismatch.
+        3. **Traceback**:
+           - Backtrack from the bottom-right corner to determine the optimal alignment.
+        
+        **Practical Use Cases**:
+        - Identifying conserved regions between species.
+        - Detecting mutations in genetic sequences.
+        
+        **References**:
+        St. Clair, C. (2016). *Exploring Bioinformatics* (2nd ed., pp. 43–45). Jones & Bartlett Learning.
+        """)
 
 # ORFs Finder tool
 elif selection == "ORFs Finder":
