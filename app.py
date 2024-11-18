@@ -4,6 +4,7 @@ from Bio.Data import CodonTable
 import numpy as np
 import pandas as pd
 import openai
+import os
 
 # OpenAI API Key (from a secret file)
 openai.api_key = os.getenv("OPENAI_API_KEY")
