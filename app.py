@@ -3,6 +3,25 @@ from Bio.Seq import Seq
 from Bio.Data import CodonTable
 import numpy as np
 import pandas as pd
+import openai
+
+# OpenAI API Key (from a secret file)
+openai.api_key = st.secrets["OPENAI_API_KEY"] 
+
+def bioinformatics_chatbot(prompt):
+    """
+    Function to interact with OpenAI GPT-4o-mini model for bioinformatics queries.
+    """
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "system", "content": "You are a bioinformatics expert. Answer questions clearly and concisely, with examples where applicable."},
+                      {"role": "user", "content": prompt}]
+        )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        return f"Error: {str(e)}"
+
 
 # Function to find Open Reading Frames (ORFs) in a DNA sequence
 def find_orfs_ncbi(sequence, min_length, genetic_code, start_codon_policy, ignore_nested=False):
@@ -154,7 +173,7 @@ st.set_page_config(page_title="Bioinformatics Tools", layout="wide")
 
 # Sidebar for navigation
 st.sidebar.title("Bioinformatics Tools")
-selection = st.sidebar.radio("Choose a tool:", ["Home", "DNA Translate/Transcribe", "Global Sequence Alignment", "ORFs Finder"])
+selection = st.sidebar.radio("Choose a tool:", ["Home", "DNA Translate/Transcribe", "Global Sequence Alignment", "ORFs Finder", "AI Bioinformatics Chatbot"])
 
 # Home page
 if selection == "Home":
@@ -326,3 +345,20 @@ elif selection == "ORFs Finder":
         **References**:
         St. Clair, C. (2016). *Exploring Bioinformatics* (2nd ed., pp. 175–177). Jones & Bartlett Learning.
         """)
+
+    # Chatbot Interface
+elif selection == "AI Bioinformatics Chatbot":
+    st.title("Bioinformatics Chatbot")
+    st.write("Ask me anything about bioinformatics!")
+
+    user_input = st.text_area("Enter your question:")
+    
+    if st.button("Ask"):
+        if user_input.strip():
+            with st.spinner("Thinking..."):
+                answer = bioinformatics_chatbot(user_input)
+            st.write("**Chatbot Response:**")
+            st.write(answer)
+        else:
+            st.write("Please enter a valid question.")
+            
