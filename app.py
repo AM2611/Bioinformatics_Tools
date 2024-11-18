@@ -10,13 +10,15 @@ openai.api_key = "sk-proj-nmIsagG6vuit46D_s1xljbzPaw_vaqlWj5u3rVoF20XIIjzEoiER2a
 
 def bioinformatics_chatbot(prompt):
     """
-    Function to interact with OpenAI GPT-4o-mini model for bioinformatics queries.
+    Function to interact with OpenAI GPT-4 model for bioinformatics queries.
     """
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
-            messages=[{"role": "system", "content": "You are a bioinformatics expert. Answer questions clearly and concisely, with examples where applicable."},
-                      {"role": "user", "content": prompt}]
+            model="gpt-4-turbo",  
+            messages=[
+                {"role": "system", "content": "You are a bioinformatics expert."},
+                {"role": "user", "content": prompt}
+            ]
         )
         return response['choices'][0]['message']['content']
     except Exception as e:
