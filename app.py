@@ -6,7 +6,7 @@ import pandas as pd
 import openai
 
 # OpenAI API Key (from a secret file)
-openai.api_key = "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" 
+openai.api_key = "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" 
 
 def bioinformatics_chatbot(prompt):
     """
