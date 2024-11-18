@@ -6,7 +6,7 @@ import pandas as pd
 import openai
 
 # OpenAI API Key (from a secret file)
-openai.api_key = st.secrets["OPENAI_API_KEY"] 
+openai.api_key = st.secrets["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"] 
 
 def bioinformatics_chatbot(prompt):
     """
