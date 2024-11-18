@@ -9,15 +9,16 @@ import os
 # OpenAI API Key (from a secret file)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Function to use gpt 4 turbo as AI model from OpenAI
 def bioinformatics_chatbot(prompt):
-    """
-    Function to interact with OpenAI GPT-4 model for bioinformatics queries.
-    """
+
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4-turbo",  
             messages=[
-                {"role": "system", "content": "You are a bioinformatics expert."},
+                # ensure bioinformatics queries output
+                {"role": "system", "content": "You are a bioinformatics expert. Answer questions clearly and concisely, with examples where applicable."}, 
+                # sending the user prompt
                 {"role": "user", "content": prompt}
             ]
         )
