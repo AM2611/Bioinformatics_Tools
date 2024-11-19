@@ -209,7 +209,7 @@ elif selection == "DNA Translate/Transcribe":
         elif action == "Translate (DNA to Protein)":
             # DNA Translation logic using Biopython Seq object + translate() default to standard genetic code
             result = dna_seq.translate()
-        st.write("**Result:**", result)
+        st.markdown(f"<h3 style='color:green;'>Result: {result}</h3>", unsafe_allow_html=True)
 
     # Expander theory and explanation section
     with st.expander("Theory and Explanation"):
