@@ -186,11 +186,13 @@ if selection == "Home":
     st.title("About the Project")
     st.write("This project is a Streamlit web application that provides bioinformatics tools for DNA sequence analysis.")
     st.write("The application is built using Python, Biopython, and Streamlit.")
-    st.write("""Creators:
-                    \n  Abdullah Mohammed Alameri
-                    \n  Hamad Saleh Almarzooqi
-                    \n  Mayed Almemari
-             """)
+    st.write("""
+**Creators:**  
+- [Abdullah Mohammed Alameri](https://github.com/AM2611)  
+- [Hamad Saleh Almarzooqi](https://github.com/AlmarzooqiH)  
+- [Mayed Almemari](https://github.com/MayoodPiano)
+""")
+
     st.write("This project is part of the Bioinformatics course at the United Arab Emirates University (UAEU).")
     
 elif selection == "DNA Translate/Transcribe":
