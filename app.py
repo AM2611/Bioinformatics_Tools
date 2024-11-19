@@ -201,16 +201,18 @@ elif selection == "DNA Translate/Transcribe":
     action = st.selectbox("Choose Action:", ["Transcribe (DNA to RNA)", "Translate (DNA to Protein)"])
 
     if st.button("Submit"):
-        result = ""
-        dna_seq = Seq(sequence)
-        if action == "Transcribe (DNA to RNA)":
-            # DNA Transcription logic using Biopython Seq object + transcribe()
-            result = dna_seq.transcribe()
-        elif action == "Translate (DNA to Protein)":
-            # DNA Translation logic using Biopython Seq object + translate() default to standard genetic code
-            result = dna_seq.translate()
-        st.markdown(f"<h3> Result: "+f"<h3 style='color:green;'>{result}</h3>", unsafe_allow_html=True)
-
+        valid_nucleotides = {"A", "C", "G", "U", "T"}
+        if all(char in valid_nucleotides for char in sequence.upper()):
+            result = ""
+            dna_seq = Seq(sequence)
+            if action == "Transcribe (DNA to RNA)":
+                # DNA Transcription logic using Biopython Seq object + transcribe()
+                result = dna_seq.transcribe()
+            elif action == "Translate (DNA to Protein)":
+                # DNA Translation logic using Biopython Seq object + translate() default to standard genetic code
+                result = dna_seq.translate()
+            st.markdown(f"<h3>Result: </h3>"+f"<h3 style='color:green;'>{result}</h3>", unsafe_allow_html=True)
+        else: st.markdown(f"<h3>Please enter valid DNA sequences.</h3>", unsafe_allow_html=True)
     # Expander theory and explanation section
     with st.expander("Theory and Explanation"):
         st.subheader("Understanding DNA Translation and Transcription")
@@ -255,8 +257,8 @@ elif selection == "Global Sequence Alignment":
             
             # Display the alignment results
             st.write("Alignment result:")
-            st.write(align1)
-            st.write(align2)
+            st.markdown(f"<h3>{align1}</h3>", unsafe_allow_html=True)
+            st.markdown(f"<h3>{align2}</h3>", unsafe_allow_html=True)
             st.write("Alignment Score:", score_table[-1][-1])
             st.write("Alignment Matrix:")
             st.dataframe(alignment_table)
